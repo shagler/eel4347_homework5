@@ -1,6 +1,10 @@
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 static char* open_file(const char* filename) {
-    FILE* file_ptr = fopen(input_file, "r");
+    FILE* file_ptr = fopen(filename, "r");
     if (file_ptr == NULL) {
         printf("Error opening file!\n");
         exit(1);
@@ -18,17 +22,18 @@ static char* open_file(const char* filename) {
 }
 
 static void save_to_file(const char* file, const char* filename) {
-    FILE* file_ptr = fopen(filename);
-    fprintf(file_ptr, buffer);
+    FILE* file_ptr = fopen(filename, "w");
+    fprintf(file_ptr, "%s\n", file);
     fclose(file_ptr);
 }
 
 static char* encrypt_file(const char* file, const char* key) {
-    char* buffer = open_file(input_file);
+    char* buffer = open_file(file);
     char* result = malloc(strlen(buffer) + 1);
     for (int i = 0; i < strlen(buffer); ++i) {
         result[i] = buffer[i] ^ key[i % strlen(key)];
     }
+    free(buffer);
     return result;
 }
 
